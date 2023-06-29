@@ -35,25 +35,27 @@ class GameScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Scaffold(
-        body: SizedBox(
-          height: 800,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const Text('Word Salad'),
-                Center(
-                  child: SizedBox(
-                    height: 700,
-                    child: TextFields(
-                      trials: state.trials,
-                      attempt: state.attempt,
-                      wordLength: state.wordLength,
-                      solution: word,
-                    )
+        body: SingleChildScrollView(
+          child: SizedBox(
+            height: 800,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Text('Word Salad'),
+                  Center(
+                    child: SizedBox(
+                      height: 700,
+                      child: TextFields(
+                        trials: state.trials,
+                        attempt: state.attempt,
+                        wordLength: state.wordLength,
+                        solution: word,
+                      )
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -86,10 +88,10 @@ class _TextFieldsState extends ConsumerState<TextFields> {
   }
 
   List<List<TextEditingController>> _getGridController(int cols, int rows) {
-    final array = List.generate(rows,
+    final controllerArray = List.generate(rows,
             (i) => List.generate(cols + 1, (_) => TextEditingController(), growable: false),
         growable: false);
-    return array;
+    return controllerArray;
   }
 
   void _submit(int index) {
