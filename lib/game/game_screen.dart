@@ -89,7 +89,9 @@ class _TextFieldsState extends ConsumerState<TextFields> {
 
   List<List<TextEditingController>> _getGridController(int cols, int rows) {
     final controllerArray = List.generate(rows,
-            (i) => List.generate(cols + 1, (_) => TextEditingController(), growable: false),
+            (i) =>
+            List.generate(
+                cols + 1, (_) => TextEditingController(), growable: false),
         growable: false);
     return controllerArray;
   }
@@ -106,48 +108,48 @@ class _TextFieldsState extends ConsumerState<TextFields> {
 
   @override
   Widget build(BuildContext context) {
-
     final state = ref.watch(gameProvider);
     debugPrint(state.validation.toString());
 
     return Column(
       children: [
         Flexible(
-          child: ListView.builder(
+          child: GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: widget.trials,
-            itemBuilder: (BuildContext context, int indexRow) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 60,
-                  child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: widget.wordLength,
-                      itemBuilder: (BuildContext context, int indexCol) {
-                    return CustomTextFormField(
-                      enabled: (indexRow == state.attempt),
-                      status: (state.validation.length > indexRow) ? state.validation.where((element) => element.rowIndex == indexRow).first.getMatchStatus(indexCol) ?? MatchStatus.none : MatchStatus.none,
-                      controller: _gridController[indexRow][indexCol],
-                    );
-                  }),
-                ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: widget.wordLength,
+              crossAxisSpacing: 0.0,
+              mainAxisSpacing: 8.0,
+            ),
+            itemCount: widget.trials * widget.wordLength,
+            itemBuilder: (BuildContext context, int index) {
+              final rowIndex = index ~/ widget.wordLength;
+              final colIndex = index % widget.wordLength;
+
+              return CustomTextFormField(
+                enabled: (rowIndex == state.attempt),
+                status: (state.validation.length > rowIndex)
+                    ? state.validation
+                    .where((element) => element.rowIndex == rowIndex)
+                    .first
+                    .getMatchStatus(colIndex) ??
+                    MatchStatus.none
+                    : MatchStatus.none,
+                controller: _gridController[rowIndex][colIndex],
               );
-          },
+            },
           ),
         ),
         ElevatedButton(
-            onPressed: () => _submit(state.attempt),
-            child: const Text('Go'))
+          onPressed: () => _submit(state.attempt),
+          child: const Text('Go'),
+        ),
       ],
     );
-
   }
 }
 
-class ErrorLayout extends StatelessWidget {
+  class ErrorLayout extends StatelessWidget {
   const ErrorLayout(this.error, [this.stackTrace]);
 
   final Object error;
@@ -172,8 +174,6 @@ class CustomTextFormField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: Container(
-        height: 60,
-        width: 60,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 2),
           borderRadius: const BorderRadius.all(Radius.circular(5)),
