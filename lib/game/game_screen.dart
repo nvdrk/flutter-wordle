@@ -35,6 +35,7 @@ class GameScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.deepPurple,
         body: SingleChildScrollView(
           child: SizedBox(
             height: 800,
@@ -42,7 +43,10 @@ class GameScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const Text('Word Salad'),
+                  const Text(
+                      'FLUTTER WORDLE',
+                      style: TextStyle(fontSize: 30, color: Colors.white38, fontWeight: FontWeight.bold),
+                  ),
                   Center(
                     child: SizedBox(
                       height: 700,
@@ -111,40 +115,47 @@ class _TextFieldsState extends ConsumerState<TextFields> {
     final state = ref.watch(gameProvider);
     debugPrint(state.validation.toString());
 
-    return Column(
-      children: [
-        Flexible(
-          child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: widget.wordLength,
-              crossAxisSpacing: 0.0,
-              mainAxisSpacing: 8.0,
-            ),
-            itemCount: widget.trials * widget.wordLength,
-            itemBuilder: (BuildContext context, int index) {
-              final rowIndex = index ~/ widget.wordLength;
-              final colIndex = index % widget.wordLength;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Flexible(
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: widget.wordLength,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+              ),
+              itemCount: widget.trials * widget.wordLength,
+              itemBuilder: (BuildContext context, int index) {
+                final rowIndex = index ~/ widget.wordLength;
+                final colIndex = index % widget.wordLength;
 
-              return CustomTextFormField(
-                enabled: (rowIndex == state.attempt),
-                status: (state.validation.length > rowIndex)
-                    ? state.validation
-                    .where((element) => element.rowIndex == rowIndex)
-                    .first
-                    .getMatchStatus(colIndex) ??
-                    MatchStatus.none
-                    : MatchStatus.none,
-                controller: _gridController[rowIndex][colIndex],
-              );
-            },
+                return CustomTextFormField(
+                  enabled: (rowIndex == state.attempt),
+                  status: (state.validation.length > rowIndex)
+                      ? state.validation
+                      .where((element) => element.rowIndex == rowIndex)
+                      .first
+                      .getMatchStatus(colIndex) ??
+                      MatchStatus.none
+                      : MatchStatus.none,
+                  controller: _gridController[rowIndex][colIndex],
+                );
+              },
+            ),
           ),
-        ),
-        ElevatedButton(
-          onPressed: () => _submit(state.attempt),
-          child: const Text('Go'),
-        ),
-      ],
+          SizedBox(
+            width: 200,
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () => _submit(state.attempt),
+              child: const Text('Go'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -171,24 +182,21 @@ class CustomTextFormField extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 2),
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-          color: status == MatchStatus.fully ? Colors.blue : status == MatchStatus.contained ? Colors.orange : Colors.white
-        ),
-        child: TextFormField(
-          controller: controller,
-          enabled: enabled,
-          textInputAction: TextInputAction.next,
-          decoration: const InputDecoration(semanticCounterText: null, border: InputBorder.none, counter: null, counterText: '',),
-          textAlign: TextAlign.center,
-          textCapitalization: TextCapitalization.characters,
-          style: const TextStyle(fontSize: 30, color: Colors.black),
-          maxLength: 1,
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 2),
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        color: status == MatchStatus.fully ? Colors.blue : status == MatchStatus.contained ? Colors.orange : Colors.white
+      ),
+      child: TextFormField(
+        controller: controller,
+        enabled: enabled,
+        textInputAction: TextInputAction.next,
+        decoration: const InputDecoration(semanticCounterText: null, border: InputBorder.none, counter: null, counterText: '',),
+        textAlign: TextAlign.center,
+        textCapitalization: TextCapitalization.characters,
+        style: const TextStyle(fontSize: 30, color: Colors.black),
+        maxLength: 1,
       ),
     );
   }
