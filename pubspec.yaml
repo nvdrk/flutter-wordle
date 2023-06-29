@@ -1,5 +1,5 @@
-name: flutter_wordle
-description: Wordle Game in Flutter
+name: word_salad
+description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -28,6 +28,14 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  equatable: ^2.0.5
+  dio: ^5.1.2
+  freezed: ^2.1.1
+  json_serializable: ^6.5.1
+  json_annotation: ^4.7.0
+  liquid_pull_to_refresh: ^3.0.1
+  riverpod: ^2.3.6
+  hooks_riverpod: ^2.1.1
   flutter:
     sdk: flutter
 
