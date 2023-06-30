@@ -1,14 +1,13 @@
 import 'package:equatable/equatable.dart';
 
 class GameState extends Equatable {
-
-  const GameState({
-    required this.solution,
-    required this.trials,
-    required this.attempt,
-    required this.wordLength,
-    required this.submittedAttempt,
-    required this.validation});
+  const GameState(
+      {required this.solution,
+      required this.trials,
+      required this.attempt,
+      required this.wordLength,
+      required this.submittedAttempt,
+      required this.validation});
 
   final String solution;
   final int trials;
@@ -20,13 +19,13 @@ class GameState extends Equatable {
   @override
   List<Object?> get props => [solution, trials, attempt, submittedAttempt];
 
-
-  GameState copyWith({
-    String? solution,
-    int? trials, int? attempt,
-    int? wordLength,
-    Map<int, String>? submittedAttempt,
-    List<Validation>? validation}) {
+  GameState copyWith(
+      {String? solution,
+      int? trials,
+      int? attempt,
+      int? wordLength,
+      Map<int, String>? submittedAttempt,
+      List<Validation>? validation}) {
     return GameState(
       solution: solution ?? this.solution,
       trials: trials ?? this.trials,
@@ -41,14 +40,16 @@ class GameState extends Equatable {
 typedef ValidatedIndex = Map<int, CharWithMatch>;
 
 class Validation {
-
   Validation({required this.rowIndex, this.validated});
 
   final int rowIndex;
   final ValidatedIndex? validated;
 
   MatchStatus? getMatchStatus(int colIndex) {
-    return validated?.entries.where((element) => element.key == colIndex).map((e) => e.value.matchStatus).first as MatchStatus;
+    return validated?.entries
+        .where((element) => element.key == colIndex)
+        .map((e) => e.value.matchStatus)
+        .first as MatchStatus;
   }
 
   @override

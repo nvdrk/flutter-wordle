@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.5 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -36,6 +36,9 @@ dependencies:
   liquid_pull_to_refresh: ^3.0.1
   riverpod: ^2.3.6
   hooks_riverpod: ^2.1.1
+  flutter_vibrate: ^1.3.0
+  google_fonts: ^5.1.0
+  flex_color_scheme: ^7.1.2
   flutter:
     sdk: flutter
 
@@ -66,6 +69,30 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - assets/google_fonts/
+
+
+
+  fonts:
+
+    - family: RobotoCondensed
+      fonts:
+        - asset: assets/google_fonts/RobotoCondensed-Bold.ttf
+          weight: 700
+        - asset: assets/google_fonts/RobotoCondensed-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/google_fonts/RobotoCondensed-Regular.ttf
+          weight: 400
+        - asset: assets/google_fonts/RobotoCondensed-Italic.ttf
+          weight: 400
+          style: italic
+        - asset: assets/google_fonts/RobotoCondensed-Light.ttf
+          weight: 300
+        - asset: assets/google_fonts/RobotoCondensed-LightItalic.ttf
+          weight: 300
+          style: italic
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

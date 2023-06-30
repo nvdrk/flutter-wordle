@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:word_salad/components/appbar.dart';
 import 'package:word_salad/game/game_state.dart';
 import 'package:word_salad/game/game_provider.dart';
+import 'package:word_salad/theme/style.dart';
 
 class GameLayout extends ConsumerWidget {
   const GameLayout({Key? key}) : super(key: key);
@@ -29,8 +31,9 @@ class GameScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(),
-        backgroundColor: Colors.white,
+        appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(60),
+            child: MoveAppBar(title: 'FLUTTER WORDLE', isPop: true,)),
         body: SingleChildScrollView(
           child: SizedBox(
             height: 800,
@@ -38,21 +41,13 @@ class GameScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text(
-                    'FLUTTER WORDLE',
-                    style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  ),
+
                   Center(
                     child: SizedBox(
                         height: 600,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Card(
-                            color: Colors.white,
-                            elevation: 10,
                             child: TextFields(
                               trials: state.trials,
                               attempt: state.attempt,
@@ -108,11 +103,20 @@ class _TextFieldsState extends ConsumerState<TextFields> {
     return controllerArray;
   }
 
-  void _submit(int index) {
+  void _submit(int index) async {
     ref.read(gameProvider.notifier).setWord(widget.solution);
     final charList = <String>[];
     for (var element in _gridController[index]) {
       charList.add(element.text);
+    }
+    charList.removeWhere((element) => element == '');
+    if (charList.length < widget.wordLength) {
+      bool canVibrate = await Vibrate.canVibrate;
+      if (canVibrate) {
+        var type = FeedbackType.heavy;
+        Vibrate.feedback(type);
+      }
+      return;
     }
     final guess = charList.join('').trim();
     ref.read(gameProvider.notifier).submit({index: guess});
@@ -121,12 +125,9 @@ class _TextFieldsState extends ConsumerState<TextFields> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(gameProvider);
-    debugPrint(state.validation.toString());
-
-    final focus = FocusNode();
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           Flexible(
@@ -187,7 +188,8 @@ class CustomTextFormField extends StatelessWidget {
       {Key? key,
       required this.controller,
       required this.enabled,
-      required this.status})
+      required this.status,
+      })
       : super(key: key);
 
   final MatchStatus status;
@@ -198,26 +200,17 @@ class CustomTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey, width: 2),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 1,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
+          border: Border.all(color: Theme.of(context).shadowColor, width: 2),
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
           color: status == MatchStatus.fully
-              ? Colors.blue
+              ? moveGood
               : status == MatchStatus.contained
-                  ? Colors.orange
-                  : Colors.white),
+                  ? moveMediumAlt
+                  : !enabled ? moveGrey.shade100 : moveGrey.shade50),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           textAlignVertical: TextAlignVertical.center,
-
           controller: controller,
           enabled: enabled,
           //focusNode: focus,
@@ -239,10 +232,11 @@ class CustomTextFormField extends StatelessWidget {
             border: InputBorder.none,
             counter: null,
             counterText: '',
+
           ),
           textAlign: TextAlign.center,
           textCapitalization: TextCapitalization.characters,
-          style: const TextStyle(fontSize: 30, color: Colors.black),
+          style: TextStyle(fontSize: 30, color: moveGrey.shade800),
           maxLength: 1,
         ),
       ),
