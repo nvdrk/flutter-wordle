@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:word_salad/components/appbar.dart';
 import 'package:word_salad/game/game_state.dart';
 import 'package:word_salad/game/game_provider.dart';
 import 'package:word_salad/theme/style.dart';
+import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 
 class GameLayout extends ConsumerWidget {
   const GameLayout({Key? key}) : super(key: key);
@@ -35,30 +36,30 @@ class GameScreen extends ConsumerWidget {
             preferredSize: Size.fromHeight(60),
             child: MoveAppBar(title: 'FLUTTER WORDLE', isPop: true,)),
         body: SingleChildScrollView(
-          child: SizedBox(
-            height: 800,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-
-                  Center(
-                    child: SizedBox(
-                        height: 600,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Card(
-                            child: TextFields(
-                              trials: state.trials,
-                              attempt: state.attempt,
-                              wordLength: state.wordLength,
-                              solution: word,
-                            ),
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
+          child: Center(
+            child: Column(
+              children: [
+                Center(
+                  child: SizedBox(
+                      height: 550,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Card(
+                          elevation: 1,
+                          child: TextFields(
+                            trials: state.trials,
+                            attempt: state.attempt,
+                            wordLength: state.wordLength,
+                            solution: word,
                           ),
-                        )),
-                  ),
-                ],
-              ),
+                        ),
+                      )),
+                ),
+                SizedBox(
+                  height: 500,
+                    child: Alphabet(state: state,)),
+              ],
             ),
           ),
         ),
@@ -92,6 +93,15 @@ class _TextFieldsState extends ConsumerState<TextFields> {
   void initState() {
     super.initState();
     _gridController = _getGridController(widget.wordLength, widget.trials);
+  }
+  
+  @override
+  void dispose() {
+    final flatList = _gridController.expand((element) => element).toList();
+    for (final controller in flatList) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   List<List<TextEditingController>> _getGridController(int cols, int rows) {
@@ -158,10 +168,17 @@ class _TextFieldsState extends ConsumerState<TextFields> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 15),
-            child: ElevatedButton(
-              onPressed: () => _submit(state.attempt),
-              child: const Text('Go'),
+            padding: const EdgeInsets.only(top: 16),
+            child: SizedBox(
+              width: 200,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 5
+                ),
+                onPressed: () => _submit(state.attempt),
+                child: const Text('Go'),
+              ),
             ),
           ),
         ],
@@ -202,11 +219,21 @@ class CustomTextFormField extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border.all(color: Theme.of(context).shadowColor, width: 2),
           borderRadius: const BorderRadius.all(Radius.circular(15)),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).cardColor,
+              offset: const Offset(-5, -5),
+              blurRadius: 10,
+              spreadRadius: 1,
+            ),
+
+          ],
           color: status == MatchStatus.fully
               ? moveGood
               : status == MatchStatus.contained
                   ? moveMediumAlt
-                  : !enabled ? moveGrey.shade100 : moveGrey.shade50),
+                  : !enabled ? moveGrey.shade100 : Theme.of(context).highlightColor),
+
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
@@ -243,3 +270,52 @@ class CustomTextFormField extends StatelessWidget {
     );
   }
 }
+
+
+class Alphabet extends ConsumerWidget {
+  const Alphabet({Key? key, required this.state}) : super(key: key);
+
+  static const List alphabet = <String>['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','Ö','Ä','Ü'];
+
+  final GameState state;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final state = ref.watch(gameProvider);
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Flexible(
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: (alphabet.length / 4).ceil(),
+                crossAxisSpacing: 0.0,
+                mainAxisSpacing: 0.0,
+              ),
+              itemCount: alphabet.length,
+              itemBuilder: (BuildContext context, int index) {
+                final status = state.alphabetMap[alphabet[index]];
+                return Text(
+                  alphabet[index],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25,
+                      color: status == MatchStatus.fully ?
+                      moveGood : status == MatchStatus.contained ?
+                      moveMedium : status == MatchStatus.none ?
+                      moveGrey.shade500 : Colors.white,),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+

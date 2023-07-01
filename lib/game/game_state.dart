@@ -7,7 +7,9 @@ class GameState extends Equatable {
       required this.attempt,
       required this.wordLength,
       required this.submittedAttempt,
-      required this.validation});
+      required this.validation,
+      required this.alphabetMap,
+      });
 
   final String solution;
   final int trials;
@@ -15,6 +17,7 @@ class GameState extends Equatable {
   final int wordLength;
   final Map<int, String> submittedAttempt;
   final List<Validation> validation;
+  final Map<String, MatchStatus> alphabetMap;
 
   @override
   List<Object?> get props => [solution, trials, attempt, submittedAttempt];
@@ -25,7 +28,9 @@ class GameState extends Equatable {
       int? attempt,
       int? wordLength,
       Map<int, String>? submittedAttempt,
-      List<Validation>? validation}) {
+      List<Validation>? validation,
+      Map<String, MatchStatus>? alphabetMap,
+      }) {
     return GameState(
       solution: solution ?? this.solution,
       trials: trials ?? this.trials,
@@ -33,17 +38,18 @@ class GameState extends Equatable {
       wordLength: wordLength ?? this.wordLength,
       submittedAttempt: submittedAttempt ?? this.submittedAttempt,
       validation: validation ?? this.validation,
+      alphabetMap: alphabetMap ?? this.alphabetMap,
     );
   }
 }
 
-typedef ValidatedIndex = Map<int, CharWithMatch>;
+typedef ValidatedCharIndexed = Map<int, CharWithMatch>;
 
 class Validation {
   Validation({required this.rowIndex, this.validated});
 
   final int rowIndex;
-  final ValidatedIndex? validated;
+  final ValidatedCharIndexed? validated;
 
   MatchStatus? getMatchStatus(int colIndex) {
     return validated?.entries
@@ -71,6 +77,7 @@ class CharWithMatch {
 }
 
 enum MatchStatus {
+  unknown,
   none,
   contained,
   fully,

@@ -19,14 +19,19 @@ class GameNotifier extends StateNotifier<GameState> {
             attempt: 0,
             submittedAttempt: {},
             wordLength: 5,
-            validation: []));
+            validation: [],
+            alphabetMap: {},
+  ));
 
   void setWord(String word) {
     state = state.copyWith(solution: word);
   }
 
-  Validation _validate(String guess, int row) {
+
+  Map<Validation, Map<String, MatchStatus>> _validate(String guess, int row) {
+
     final validation = Validation(rowIndex: row, validated: {});
+    final Map<String, MatchStatus> alphabetMap = {};
 
     final indexOfFullMatches = <int>[];
     final indexesOfPartialMatches = <int>[];
@@ -74,22 +79,28 @@ class GameNotifier extends StateNotifier<GameState> {
         charWithMatch.char = element;
         charWithMatch.matchStatus = MatchStatus.none;
       }
-      validation.validated!.addAll({i: charWithMatch});
+      validation.validated?.addAll({i: charWithMatch});
+      alphabetMap.addAll({charWithMatch.char! : charWithMatch.matchStatus!});
     }
-    return validation;
+    return {validation : alphabetMap};
   }
 
   void submit(Map<int, String> userSolution) {
     var currentSubmissions = Map.of(state.submittedAttempt);
     currentSubmissions.addAll(userSolution);
     final validations = List.of(state.validation);
+    final alphabetMap = state.alphabetMap;
+    final validated = _validate(userSolution.values.first, userSolution.keys.first);
     validations
-        .add(_validate(userSolution.values.first, userSolution.keys.first));
+        .add(validated.keys.first);
+    alphabetMap.addAll(validated.values.first);
 
     state = state.copyWith(
         submittedAttempt: currentSubmissions,
         attempt: userSolution.keys.first + 1,
-        validation: validations);
+        validation: validations,
+        alphabetMap: alphabetMap,
+    );
     if (userSolution.values.first == state.solution) {}
   }
 }
