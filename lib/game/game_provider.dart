@@ -89,7 +89,7 @@ class GameNotifier extends StateNotifier<GameState> {
     var currentSubmissions = Map.of(state.submittedAttempt);
     currentSubmissions.addAll(userSolution);
     final validations = List.of(state.validation);
-    final alphabetMap = state.alphabetMap;
+    final alphabetMap = Map.of(state.alphabetMap);
     final validated = _validate(userSolution.values.first, userSolution.keys.first);
     validations
         .add(validated.keys.first);

@@ -232,7 +232,7 @@ class CustomTextFormField extends StatelessWidget {
               ? moveGood
               : status == MatchStatus.contained
                   ? moveMediumAlt
-                  : !enabled ? moveGrey.shade100 : Theme.of(context).highlightColor),
+                  : !enabled ? moveGrey.shade300 : Colors.white),
 
       child: Padding(
         padding: const EdgeInsets.all(8.0),
