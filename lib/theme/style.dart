@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-MaterialColor moveGrey = const MaterialColor(0xFFEFEFF4, {
+MaterialColor greyTint = const MaterialColor(0xFFEFEFF4, {
   50: Color(0xFFEFEFF4),
   100: Color(0xFFD5D9E1),
   200: Color(0xFFBBC0CC),
@@ -13,13 +13,13 @@ MaterialColor moveGrey = const MaterialColor(0xFFEFEFF4, {
   900: Color(0xFF323640)
 });
 
-Color moveGoodAlt = const Color(0xFF72A202);
-Color moveGood = const Color(0xFFA2A93A);
-Color moveGoodLight = const Color(0xFFCACF85);
-Color moveBad = const Color(0xFF650D1B);
-Color moveMedium = const Color(0xFFDB8B12);
-Color moveBadAlt = const Color(0xFFAF3B6E);
-Color moveMediumAlt = const Color(0xFFDB8B12);
+Color goodAlt = const Color(0xFF72A202);
+Color good = const Color(0xFFA2A93A);
+Color goodLight = const Color(0xFFCACF85);
+Color bad = const Color(0xFF650D1B);
+Color medium = const Color(0xFFDB8B12);
+Color badAlt = const Color(0xFFAF3B6E);
+Color mediumAlt = const Color(0xFFDB8B12);
 
 TextTheme moveText = const TextTheme(
   headline1: TextStyle(

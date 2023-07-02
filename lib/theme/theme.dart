@@ -9,8 +9,8 @@ part 'data/radius.dart';
 part 'data/spacing.dart';
 part 'data/typography.dart';
 
-abstract class MoveTheme {
-  const MoveTheme({
+abstract class GreyTheme {
+  const GreyTheme({
     required this.brightness,
     required this.palette,
     required this.radius,
@@ -25,7 +25,7 @@ abstract class MoveTheme {
   ThemeData get material;
 }
 
-class LightTheme extends MoveTheme with MaterialThemeMixin {
+class LightTheme extends GreyTheme with MaterialThemeMixin {
   const LightTheme({
     super.palette = const Palette.gray(),
     super.radius = const ThemeRadius(),

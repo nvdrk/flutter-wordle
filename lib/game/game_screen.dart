@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:flutter_wordle/components/neumorphic_button.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:word_salad/components/appbar.dart';
-import 'package:word_salad/game/game_state.dart';
-import 'package:word_salad/game/game_provider.dart';
-import 'package:word_salad/theme/style.dart';
-import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
+import 'package:flutter_wordle/components/appbar.dart';
+import 'package:flutter_wordle/game/game_state.dart';
+import 'package:flutter_wordle/game/game_provider.dart';
+import 'package:flutter_wordle/theme/style.dart';
+import 'package:flutter_wordle/components/neumphorphic_textfield.dart';
 
 class GameLayout extends ConsumerWidget {
   const GameLayout({Key? key}) : super(key: key);
@@ -32,9 +33,13 @@ class GameScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: greyTint.shade800,
         appBar: const PreferredSize(
             preferredSize: Size.fromHeight(60),
-            child: MoveAppBar(title: 'FLUTTER WORDLE', isPop: true,)),
+            child: CustomAppBar(
+              title: 'FLUTTER WORDLE',
+              isPop: true,
+            )),
         body: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
           child: Center(
@@ -45,20 +50,18 @@ class GameScreen extends ConsumerWidget {
                       height: 550,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Card(
-                          elevation: 1,
-                          child: TextFields(
-                            trials: state.trials,
-                            attempt: state.attempt,
-                            wordLength: state.wordLength,
-                            solution: word,
-                          ),
+                        child: TextFields(
+                          trials: state.trials,
+                          attempt: state.attempt,
+                          wordLength: state.wordLength,
+                          solution: word,
                         ),
                       )),
                 ),
-                SizedBox(
-                  height: 500,
-                    child: Alphabet(state: state,)),
+                const SizedBox(
+                    height: 500,
+                    child: Alphabet(),
+                ),
               ],
             ),
           ),
@@ -94,7 +97,7 @@ class _TextFieldsState extends ConsumerState<TextFields> {
     super.initState();
     _gridController = _getGridController(widget.wordLength, widget.trials);
   }
-  
+
   @override
   void dispose() {
     final flatList = _gridController.expand((element) => element).toList();
@@ -153,7 +156,7 @@ class _TextFieldsState extends ConsumerState<TextFields> {
                 final rowIndex = index ~/ widget.wordLength;
                 final colIndex = index % widget.wordLength;
 
-                return CustomTextFormField(
+                return NeumorphicTextFormField(
                   enabled: (rowIndex == state.attempt),
                   status: (state.validation.length > rowIndex)
                       ? state.validation
@@ -167,19 +170,11 @@ class _TextFieldsState extends ConsumerState<TextFields> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: SizedBox(
-              width: 200,
+          NeumorphicButton(
+              onTap: () => _submit(state.attempt),
+              title: 'SUBMIT',
               height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 5
-                ),
-                onPressed: () => _submit(state.attempt),
-                child: const Text('Go'),
-              ),
-            ),
+              width: 200,
           ),
         ],
       ),
@@ -200,88 +195,45 @@ class ErrorLayout extends StatelessWidget {
   }
 }
 
-class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField(
-      {Key? key,
-      required this.controller,
-      required this.enabled,
-      required this.status,
-      })
-      : super(key: key);
-
-  final MatchStatus status;
-  final bool enabled;
-  final TextEditingController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Theme.of(context).shadowColor, width: 2),
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).cardColor,
-              offset: const Offset(-5, -5),
-              blurRadius: 10,
-              spreadRadius: 1,
-            ),
-
-          ],
-          color: status == MatchStatus.fully
-              ? moveGood
-              : status == MatchStatus.contained
-                  ? moveMediumAlt
-                  : !enabled ? moveGrey.shade300 : Colors.white),
-
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextFormField(
-          textAlignVertical: TextAlignVertical.center,
-          controller: controller,
-          enabled: enabled,
-          //focusNode: focus,
-          textInputAction: TextInputAction.next,
-          onChanged: (input) {
-            if (input != '') {
-              FocusScope.of(context).nextFocus();
-              controller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: controller.text.length));
-            } else {
-              debugPrint('prev');
-              controller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: controller.text.length));
-              FocusScope.of(context).previousFocus();
-            }
-          },
-          decoration: const InputDecoration(
-            semanticCounterText: null,
-            border: InputBorder.none,
-            counter: null,
-            counterText: '',
-
-          ),
-          textAlign: TextAlign.center,
-          textCapitalization: TextCapitalization.characters,
-          style: TextStyle(fontSize: 30, color: moveGrey.shade800),
-          maxLength: 1,
-        ),
-      ),
-    );
-  }
-}
 
 
 class Alphabet extends ConsumerWidget {
-  const Alphabet({Key? key, required this.state}) : super(key: key);
+  const Alphabet({Key? key,}) : super(key: key);
 
-  static const List alphabet = <String>['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','Ö','Ä','Ü'];
-
-  final GameState state;
+  static const List alphabet = <String>[
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+    'Ö',
+    'Ä',
+    'Ü',
+  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final state = ref.watch(gameProvider);
 
     return Padding(
@@ -305,10 +257,14 @@ class Alphabet extends ConsumerWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 25,
-                      color: status == MatchStatus.fully ?
-                      moveGood : status == MatchStatus.contained ?
-                      moveMedium : status == MatchStatus.none ?
-                      moveGrey.shade500 : Colors.white,),
+                    color: status == MatchStatus.fully
+                        ? good
+                        : status == MatchStatus.contained
+                            ? medium
+                            : status == MatchStatus.none
+                                ? greyTint.shade500
+                                : Colors.white,
+                  ),
                 );
               },
             ),
@@ -318,4 +274,3 @@ class Alphabet extends ConsumerWidget {
     );
   }
 }
-

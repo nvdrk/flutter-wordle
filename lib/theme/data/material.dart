@@ -5,7 +5,7 @@ extension ThemeExtensionsProvider on ThemeData {
   ThemeRadius get radius => extension<ThemeRadius>()!;
 }
 
-mixin MaterialThemeMixin on MoveTheme {
+mixin MaterialThemeMixin on GreyTheme {
   @override
   ThemeData get material {
     return ThemeData(

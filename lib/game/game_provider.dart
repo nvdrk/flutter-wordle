@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:word_salad/data/api.dart';
+import 'package:flutter_wordle/data/api.dart';
 
 import 'game_state.dart';
 
