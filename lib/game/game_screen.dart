@@ -174,7 +174,7 @@ class _TextFieldsState extends ConsumerState<TextFields> {
               onTap: () => _submit(state.attempt),
               title: 'SUBMIT',
               height: 50,
-              width: 200,
+              width: 200, isToggle: false, hasHapticFeedBack: false,
           ),
         ],
       ),

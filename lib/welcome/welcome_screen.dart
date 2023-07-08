@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_wordle/components/neumorphic_button.dart';
 import 'package:flutter_wordle/components/appbar.dart';
-import 'package:flutter_wordle/game/game_provider.dart';
 import 'package:flutter_wordle/theme/style.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -32,7 +31,7 @@ class WelcomeScreen extends ConsumerWidget {
                     onTap: () => context.go('/game'),
                     title: 'New Game',
                     height: 50,
-                    width: 200,
+                    width: 200, isToggle: false, hasHapticFeedBack: false,
                 ),
               ),
               Padding(
@@ -41,7 +40,7 @@ class WelcomeScreen extends ConsumerWidget {
                   onTap: () => print('pressed'),
                   title: 'Settings',
                   height: 50,
-                  width: 200,
+                  width: 200, isToggle: false, hasHapticFeedBack: false,
                 ),
               ),
             ],

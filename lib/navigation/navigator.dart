@@ -20,7 +20,7 @@ mixin RouterMixin<T extends StatefulWidget> on State<T> {
           path: '/game',
           pageBuilder: (context, state) => NoTransitionPage(
             key: state.pageKey,
-            child: GameLayout(),
+            child: const GameLayout(),
           ),
         ),
       ]

@@ -91,8 +91,8 @@ class WordRepository extends HttpClientInterface {
 }
 
 abstract class Dependency {
-  static Provider<WordRepository> get wordRepository => postRepo;
+  static Provider<WordRepository> get wordRepository => wordRepo;
 }
 
-final postRepo = Provider<WordRepository>(
+final wordRepo = Provider<WordRepository>(
         (ref) => WordRepository(baseURL: 'https://random-word-api.herokuapp.com/'));

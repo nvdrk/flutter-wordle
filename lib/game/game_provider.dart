@@ -33,16 +33,17 @@ class GameNotifier extends StateNotifier<GameState> {
     final validation = Validation(rowIndex: row, validated: {});
     final Map<String, MatchStatus> alphabetMap = {};
 
-    final indexOfFullMatches = <int>[];
+    final indexesOfFullMatches = <int>[];
     final indexesOfPartialMatches = <int>[];
 
     final guessCharList = guess.split('').map((e) => e.toUpperCase()).toList();
     final solutionCharList =
         state.solution.split('').map((e) => e.toUpperCase()).toList();
 
+
     for (int i = 0; i < guessCharList.length; i++) {
       if (guessCharList[i] == solutionCharList[i]) {
-        indexOfFullMatches.add(i);
+        indexesOfFullMatches.add(i);
       }
     }
 
@@ -53,20 +54,33 @@ class GameNotifier extends StateNotifier<GameState> {
     }
 
     for (int i = 0; i < guessCharList.length; i++) {
+
       final charWithMatch = CharWithMatch();
 
-      var element = guessCharList[i];
-      var solutionIndex = solutionCharList.indexOf(element);
+      final element = guessCharList[i];
+      final solutionIndex = solutionCharList.indexOf(element);
 
       if (solutionIndex == -1) {
         charWithMatch.char = element;
         charWithMatch.matchStatus = MatchStatus.none;
+
       } else if (element == solutionCharList[i]) {
         charWithMatch.char = element;
         charWithMatch.matchStatus = MatchStatus.fully;
+
       } else if (solutionCharList.contains(element)) {
+
+        final elementCount = solutionCharList.where((char) => char == element).toList().length;
+        final elementCountPartial = guessCharList.where((char) => char == element).toList().length;
+
+        final overCount = elementCountPartial - elementCount;
+
+        for (int i = overCount; i > 1; i--) {
+          indexesOfPartialMatches.removeWhere((index) => guessCharList[index] == element);
+        }
+
         indexesOfPartialMatches
-            .removeWhere((element) => indexOfFullMatches.contains(element));
+            .removeWhere((element) => indexesOfFullMatches.contains(element));
 
         if (indexesOfPartialMatches.contains(guessCharList.indexOf(element))) {
           charWithMatch.char = element;
@@ -86,7 +100,7 @@ class GameNotifier extends StateNotifier<GameState> {
   }
 
   void submit(Map<int, String> userSolution) {
-    var currentSubmissions = Map.of(state.submittedAttempt);
+    final currentSubmissions = Map.of(state.submittedAttempt);
     currentSubmissions.addAll(userSolution);
     final validations = List.of(state.validation);
     final alphabetMap = Map.of(state.alphabetMap);
