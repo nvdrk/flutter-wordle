@@ -44,13 +44,13 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
       height: widget.height,
       child: Material(
         borderRadius: BorderRadius.circular(15.0),
-        elevation: 10,
-        shadowColor: greyTint.shade700,
+        elevation: 5,
+        shadowColor: greyTint.shade200,
         child: GestureDetector(
           onTap: () => _toggle(),
           child: AnimatedContainer(
             decoration: BoxDecoration(
-              border: Border.all(color: greyTint.shade700, width: 0.5),
+              border: Border.all(color: greyTint.shade200, width: 0.5),
               borderRadius: const BorderRadius.all(Radius.circular(15)),
               gradient: _isElevated ? null :
               LinearGradient(
@@ -61,25 +61,25 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
                   1.2,
                 ],
                 colors: [
-                  greyTint.shade900,
-                  greyTint.shade700,
+                  greyTint.shade100,
+                  greyTint.shade300,
                 ],
               ),
               boxShadow: [
                 BoxShadow(
-                  color: greyTint.shade900,
+                  color: greyTint.shade400,
                   offset: const Offset(2, 5),
                   blurRadius: 5,
                   spreadRadius: 0.5,
                 ),
                 BoxShadow(
-                  color: greyTint.shade700,
+                  color: greyTint.shade100,
                   offset: const Offset(-2, -4),
                   blurRadius: 5,
                   spreadRadius: 0.5,
                 ),
               ],
-              color: greyTint.shade800,
+              color: greyTint.shade200,
             ),
             duration: const Duration(milliseconds: 100),
 
@@ -87,7 +87,7 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
               child: Text(
                 widget.title,
                 style: TextStyle(
-                    color: greyTint.shade200,
+                    color: greyTint.shade700,
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),

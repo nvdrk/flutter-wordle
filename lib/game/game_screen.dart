@@ -31,16 +31,16 @@ class GameScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(gameProvider);
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: greyTint.shade800,
-        appBar: const PreferredSize(
-            preferredSize: Size.fromHeight(60),
-            child: CustomAppBar(
-              title: 'FLUTTER WORDLE',
-              isPop: true,
-            )),
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: greyTint.shade200,
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(60),
+          child: CustomAppBar(
+            title: 'FLUTTER WORDLE',
+            isPop: true,
+          )),
+      body: SafeArea(
+        child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
           child: Center(
             child: Column(

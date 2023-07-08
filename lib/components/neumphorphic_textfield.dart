@@ -19,23 +19,23 @@ class NeumorphicTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: greyTint.shade700, width: 0.5),
+        border: Border.all(color: greyTint.shade300, width: 0.5),
         borderRadius: const BorderRadius.all(Radius.circular(15)),
         boxShadow: [
           BoxShadow(
-            color: greyTint.shade900,
+            color: greyTint.shade400,
             offset: const Offset(2, 5),
             blurRadius: 5,
             spreadRadius: 0.5,
           ),
           BoxShadow(
-            color: greyTint.shade700,
+            color: greyTint.shade100,
             offset: const Offset(-2, -4),
             blurRadius: 5,
-            spreadRadius: 0.1,
+            spreadRadius: 0.5,
           ),
         ],
-        color: greyTint.shade800,
+        color: greyTint.shade200,
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -44,8 +44,8 @@ class NeumorphicTextFormField extends StatelessWidget {
             0.99,
           ],
           colors: [
-            greyTint.shade900,
-            greyTint.shade700,
+            greyTint.shade300,
+            greyTint.shade100,
           ],
         ),
       ),

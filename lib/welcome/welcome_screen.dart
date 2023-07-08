@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_wordle/components/neumorphic_button.dart';
 import 'package:flutter_wordle/components/appbar.dart';
 import 'package:flutter_wordle/theme/style.dart';
@@ -14,9 +15,10 @@ class WelcomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     return Scaffold(
-      backgroundColor: greyTint.shade800,
+      backgroundColor: greyTint.shade200,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: SafeArea(
         child: Center(
@@ -25,8 +27,8 @@ class WelcomeScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                  'WordHamster',
-                style: const HeadlineTextStyle().copyWith(color: Colors.black, fontSize: 30),
+                  'WORD HAMSTER',
+                style: const MontserratTextStyle().copyWith(color: greyTint.shade800, fontSize: 30),
               ),
               Lottie.asset('assets/lottie/title.json'),
               Padding(

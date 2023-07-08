@@ -14,13 +14,10 @@ class CustomAppBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBar(
-      shadowColor: greyTint.shade900,
+      backgroundColor: greyTint.shade600,
       centerTitle: true,
-      systemOverlayStyle: const SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
-        statusBarIconBrightness: Brightness.dark,
-      ),
-      elevation: 8,
+      systemOverlayStyle: SystemUiOverlayStyle.light,
+      elevation: 0,
       leading: isPop ? IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
