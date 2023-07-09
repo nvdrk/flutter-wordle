@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
+import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:flutter_wordle/components/neumorphic_button.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -33,12 +34,11 @@ class GameScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: greyTint.shade200,
-      appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: CustomAppBar(
-            title: 'FLUTTER WORDLE',
-            isPop: true,
-          )),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        toolbarHeight: 0,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
@@ -256,14 +256,26 @@ class Alphabet extends ConsumerWidget {
                   alphabet[index],
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    shadows: [
+                      Shadow(
+                        offset: const Offset(2, 2),
+                        blurRadius: 2.0,
+                        color: greyTint.shade50,
+                      ),
+                      Shadow(
+                        offset: const Offset(-0.5, -0.5),
+                        blurRadius: 2.0,
+                        color: greyTint.shade700,
+                      ),
+                    ],
                     fontSize: 25,
                     color: status == MatchStatus.fully
                         ? good
                         : status == MatchStatus.contained
                             ? medium
                             : status == MatchStatus.none
-                                ? greyTint.shade500
-                                : Colors.white,
+                                ? greyTint.shade800
+                                : greyTint.shade500,
                   ),
                 );
               },

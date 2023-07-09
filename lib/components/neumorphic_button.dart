@@ -87,6 +87,18 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
               child: Text(
                 widget.title,
                 style: TextStyle(
+                    shadows: [
+                      Shadow(
+                        offset: const Offset(2, 2),
+                        blurRadius: 2.0,
+                        color: greyTint.shade50,
+                      ),
+                      Shadow(
+                        offset: const Offset(-0.5, -0.5),
+                        blurRadius: 2.0,
+                        color: greyTint.shade700,
+                      ),
+                    ],
                     color: greyTint.shade700,
                     fontSize: 20,
                     fontWeight: FontWeight.bold),

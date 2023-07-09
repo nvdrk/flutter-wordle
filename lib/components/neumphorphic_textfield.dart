@@ -20,7 +20,7 @@ class NeumorphicTextFormField extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: greyTint.shade300, width: 0.5),
-        borderRadius: const BorderRadius.all(Radius.circular(15)),
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
         boxShadow: [
           BoxShadow(
             color: greyTint.shade400,
@@ -78,14 +78,26 @@ class NeumorphicTextFormField extends StatelessWidget {
           textAlign: TextAlign.center,
           textCapitalization: TextCapitalization.characters,
           style: TextStyle(
+              shadows: [
+                Shadow(
+                  offset: const Offset(2, 2),
+                  blurRadius: 2.0,
+                  color: greyTint.shade50,
+                ),
+                Shadow(
+                  offset: const Offset(-0.5, -0.5),
+                  blurRadius: 2.0,
+                  color: greyTint.shade700,
+                ),
+              ],
               fontSize: 30,
               color: status == MatchStatus.fully
                   ? good
                   : status == MatchStatus.contained
                   ? mediumAlt
                   : !enabled
-                  ? greyTint.shade300
-                  : Colors.white),
+                  ? greyTint.shade700
+                  : greyTint.shade500),
           maxLength: 1,
         ),
       ),
