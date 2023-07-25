@@ -18,7 +18,7 @@ class _MyAppState extends State<MyApp> with RouterMixin {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Wordle',
+      title: 'WORD HAMSTER',
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
       routerDelegate: router.routerDelegate,

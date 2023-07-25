@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_wordle/components/neumorphic_button.dart';
 import 'package:flutter_wordle/theme/style.dart';
-import 'package:flutter_wordle/theme/theme.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class WelcomeScreen extends ConsumerWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
+import '../theme/theme.dart';
+
+class LoadingLayout extends ConsumerWidget {
+  const LoadingLayout({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     return Scaffold(
-      backgroundColor: greyTint.shade200,
+      backgroundColor: greyTint.shade300,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -26,29 +25,25 @@ class WelcomeScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                  'WORD HAMSTER',
+                'WORD HAMSTER',
                 style: const MontserratTextStyle().copyWith(color: greyTint.shade800, fontSize: 30),
               ),
               Lottie.asset(
-                  'assets/lottie/title.json',
+                'assets/lottie/title.json',
                 repeat: false,
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: NeumorphicButton(
-                    onTap: () => context.go('/game'),
-                    title: 'New Game',
-                    height: 50,
-                    width: 200, isToggle: false, hasHapticFeedBack: false,
-                ),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: SizedBox(height: 50,)
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: NeumorphicButton(
-                  onTap: () => print('pressed'),
-                  title: 'Settings',
+                child: SizedBox(
                   height: 50,
-                  width: 200, isToggle: false, hasHapticFeedBack: false,
+                  child: Text(
+                    'LET\'S GO...',
+                    style: const MontserratTextStyle().copyWith(color: greyTint.shade800, fontSize: 30),
+                  ),
                 ),
               ),
             ],

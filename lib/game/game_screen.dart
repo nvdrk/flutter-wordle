@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
-import 'package:flutter/services.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:flutter_wordle/components/neumorphic_button.dart';
+import 'package:flutter_wordle/layouts/loading_layout.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_wordle/components/appbar.dart';
 import 'package:flutter_wordle/game/game_state.dart';
@@ -18,7 +19,7 @@ class GameLayout extends ConsumerWidget {
     return value.when(
       data: (value) => GameScreen(word: value),
       error: ErrorLayout.new,
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const LoadingLayout(),
     );
   }
 }
@@ -34,10 +35,12 @@ class GameScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: greyTint.shade200,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        toolbarHeight: 0,
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(70),
+          child: CustomAppBar(
+            title: 'Word Hamster',
+            isPop: true,
+          ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -59,7 +62,7 @@ class GameScreen extends ConsumerWidget {
                       )),
                 ),
                 const SizedBox(
-                    height: 500,
+                    height: 250,
                     child: Alphabet(),
                 ),
               ],
@@ -118,6 +121,7 @@ class _TextFieldsState extends ConsumerState<TextFields> {
 
   void _submit(int index) async {
     ref.read(gameProvider.notifier).setWord(widget.solution);
+
     final charList = <String>[];
     for (var element in _gridController[index]) {
       charList.add(element.text);
@@ -133,6 +137,42 @@ class _TextFieldsState extends ConsumerState<TextFields> {
     }
     final guess = charList.join('').trim();
     ref.read(gameProvider.notifier).submit({index: guess});
+
+    final state = ref.watch(gameProvider);
+    if (state.trials == state.attempt) {
+      _showAlertDialog();
+    }
+  }
+
+  Future<void> _showAlertDialog() async {
+    final solution = ref.read(gameProvider).solution;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Sorry :('),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                Text('No Luck this time'
+                    'The Solution is: \n'
+                    '$solution'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Go Back'),
+              onPressed: () {
+                ref.invalidate(gameProvider);
+                context.go('/');
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -286,3 +326,4 @@ class Alphabet extends ConsumerWidget {
     );
   }
 }
+

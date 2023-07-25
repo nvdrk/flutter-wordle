@@ -115,6 +115,5 @@ class GameNotifier extends StateNotifier<GameState> {
         validation: validations,
         alphabetMap: alphabetMap,
     );
-    if (userSolution.values.first == state.solution) {}
   }
 }

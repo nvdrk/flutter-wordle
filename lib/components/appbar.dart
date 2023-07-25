@@ -28,7 +28,7 @@ class CustomAppBar extends ConsumerWidget {
       title: Text(
         title,
         style: GoogleFonts.oswald(
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.normal,
             color: good),
         textAlign: TextAlign.center,
