@@ -1,10 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_wordle/data/api.dart';
 
 import 'game_state.dart';
 
 final wordProvider = FutureProvider.autoDispose<String>((ref) async {
-  return ref.watch(Dependency.wordRepository).getRandomWord(5);
+  return ref.read(Dependency.wordRepository).getRandomWord(5);
 });
 
 final gameProvider = StateNotifierProvider<GameNotifier, GameState>((ref) {
@@ -38,7 +39,7 @@ class GameNotifier extends StateNotifier<GameState> {
 
     final guessCharList = guess.split('').map((e) => e.toUpperCase()).toList();
     final solutionCharList =
-        state.solution.split('').map((e) => e.toUpperCase()).toList();
+    state.solution.split('').map((e) => e.toUpperCase()).toList();
 
 
     for (int i = 0; i < guessCharList.length; i++) {
@@ -108,6 +109,8 @@ class GameNotifier extends StateNotifier<GameState> {
     validations
         .add(validated.keys.first);
     alphabetMap.addAll(validated.values.first);
+
+    debugPrint(state.validation.toString());
 
     state = state.copyWith(
         submittedAttempt: currentSubmissions,

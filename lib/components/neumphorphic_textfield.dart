@@ -63,7 +63,6 @@ class NeumorphicTextFormField extends StatelessWidget {
               controller.selection = TextSelection.fromPosition(
                   TextPosition(offset: controller.text.length));
             } else {
-              debugPrint('prev');
               controller.selection = TextSelection.fromPosition(
                   TextPosition(offset: controller.text.length));
               FocusScope.of(context).previousFocus();

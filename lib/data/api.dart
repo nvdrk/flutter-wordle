@@ -74,6 +74,7 @@ class Response<T> extends Equatable {
 }
 
 class WordRepository extends HttpClientInterface {
+
   WordRepository({required super.baseURL});
 
   Future<String> getRandomWord(int length) async {
