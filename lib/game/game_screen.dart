@@ -145,7 +145,7 @@ class _TextFieldsState extends ConsumerState<TextFields> {
           content: SingleChildScrollView(
             child: ListBody(
               children: [
-                Text(' No Luck this time'
+                Text('No Luck this time \n'
                     'The Solution is: \n'
                     '$solution'),
               ],
@@ -188,6 +188,7 @@ class _TextFieldsState extends ConsumerState<TextFields> {
                 final colIndex = index % widget.wordLength;
 
                 return NeumorphicTextFormField(
+                  onTap: () => ref.read(gameProvider.notifier).updateColIndex(colIndex),
                   node: FocusNode(),
                   index: colIndex,
                   enabled: (rowIndex == state.attempt),

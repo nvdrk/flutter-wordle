@@ -1,11 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_wordle/game/game_provider.dart';
 import 'package:flutter_wordle/game/game_state.dart';
 import 'package:flutter_wordle/theme/style.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class NeumorphicTextFormField extends ConsumerWidget {
+class NeumorphicTextFormField extends StatelessWidget {
   const NeumorphicTextFormField({
     Key? key,
     required this.controller,
@@ -13,6 +10,7 @@ class NeumorphicTextFormField extends ConsumerWidget {
     required this.enabled,
     required this.status,
     required this.index,
+    this.onTap,
   }) : super(key: key);
 
   final MatchStatus status;
@@ -20,10 +18,10 @@ class NeumorphicTextFormField extends ConsumerWidget {
   final int index;
   final bool enabled;
   final TextEditingController controller;
+  final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(gameProvider);
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: greyTint.shade300, width: 0.5),
@@ -60,20 +58,14 @@ class NeumorphicTextFormField extends ConsumerWidget {
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           textAlignVertical: TextAlignVertical.center,
+          cursorHeight: 0,
           controller: controller,
           enabled: enabled,
-          //focusNode: focus,
+          focusNode: node,
           textInputAction: TextInputAction.next,
           keyboardType: TextInputType.none,
-          onFieldSubmitted: (input) {
-            if (input != '') {
-              node.nextFocus();
-            } else {
-              node.previousFocus();
-            }
-          },
+          onTap: onTap,
           onChanged: (input) {
-            node.unfocus();
             if (input != '') {
               node.nextFocus();
             } else {
