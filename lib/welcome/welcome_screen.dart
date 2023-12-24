@@ -26,20 +26,20 @@ class WelcomeScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                  'WORD HAMSTER',
+                'WORD HAMSTER',
                 style: const MontserratTextStyle().copyWith(color: greyTint.shade800, fontSize: 30),
               ),
               Lottie.asset(
-                  'assets/lottie/title.json',
+                'assets/lottie/title.json',
                 repeat: false,
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: NeumorphicButton(
-                    onTap: () => context.go('/game'),
-                    title: 'New Game',
-                    height: 50,
-                    width: 200, isToggle: false, hasHapticFeedBack: false,
+                  onTap: () => context.go('/game'),
+                  title: 'New Game',
+                  height: 50,
+                  width: 200, isToggle: false, hasHapticFeedBack: false,
                 ),
               ),
               Padding(

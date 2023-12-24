@@ -36,38 +36,26 @@ class GameScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: greyTint.shade200,
       appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(70),
-          child: CustomAppBar(
-            title: 'Word Hamster',
-            isPop: true,
-          ),
+        preferredSize: Size.fromHeight(70),
+        child: CustomAppBar(
+          title: 'Word Hamster',
+          isPop: true,
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
-          child: Center(
-            child: Column(
-              children: [
-                Center(
-                  child: SizedBox(
-                      height: 550,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: TextFields(
-                          trials: state.trials,
-                          attempt: state.attempt,
-                          wordLength: state.wordLength,
-                          solution: word,
-                        ),
-                      )),
+          child: SizedBox(
+              height: 800,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextFields(
+                  trials: state.trials,
+                  attempt: state.attempt,
+                  wordLength: state.wordLength,
+                  solution: word,
                 ),
-                const SizedBox(
-                    height: 250,
-                    child: Alphabet(),
-                ),
-              ],
-            ),
-          ),
+              )),
         ),
       ),
     );
@@ -113,7 +101,7 @@ class _TextFieldsState extends ConsumerState<TextFields> {
   List<List<TextEditingController>> _getGridController(int cols, int rows) {
     final controllerArray = List.generate(
         rows,
-        (i) => List.generate(cols + 1, (_) => TextEditingController(),
+            (i) => List.generate(cols + 1, (_) => TextEditingController(),
             growable: false),
         growable: false);
     return controllerArray;
@@ -136,7 +124,9 @@ class _TextFieldsState extends ConsumerState<TextFields> {
       return;
     }
     final guess = charList.join('').trim();
-    ref.read(gameProvider.notifier).submit({index: guess});
+    ref.read(gameProvider.notifier)
+      ..submit({index: guess})
+    ..updateColIndex(0);
 
     final state = ref.watch(gameProvider);
     if (state.trials == state.attempt) {
@@ -155,7 +145,7 @@ class _TextFieldsState extends ConsumerState<TextFields> {
           content: SingleChildScrollView(
             child: ListBody(
               children: [
-                Text('No Luck this time'
+                Text(' No Luck this time'
                     'The Solution is: \n'
                     '$solution'),
               ],
@@ -184,6 +174,7 @@ class _TextFieldsState extends ConsumerState<TextFields> {
       child: Column(
         children: [
           Flexible(
+            flex: 2,
             child: GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -197,24 +188,41 @@ class _TextFieldsState extends ConsumerState<TextFields> {
                 final colIndex = index % widget.wordLength;
 
                 return NeumorphicTextFormField(
+                  node: FocusNode(),
+                  index: colIndex,
                   enabled: (rowIndex == state.attempt),
                   status: (state.validation.length > rowIndex)
                       ? state.validation
-                              .where((element) => element.rowIndex == rowIndex)
-                              .first
-                              .getMatchStatus(colIndex) ??
-                          MatchStatus.none
+                      .where((element) => element.rowIndex == rowIndex)
+                      .first
+                      .getMatchStatus(colIndex) ??
+                      MatchStatus.none
                       : MatchStatus.none,
                   controller: _gridController[rowIndex][colIndex],
                 );
               },
             ),
           ),
-          NeumorphicButton(
+          Flexible(
+            flex: 1,
+            child: SizedBox(
+              height: 200,
+              child: Card(
+                color: greyTint.shade100,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Alphabet(gridController: _gridController),
+                  )),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: NeumorphicButton(
               onTap: () => _submit(state.attempt),
               title: 'SUBMIT',
               height: 50,
               width: 200, isToggle: false, hasHapticFeedBack: false,
+            ),
           ),
         ],
       ),
@@ -238,7 +246,9 @@ class ErrorLayout extends StatelessWidget {
 
 
 class Alphabet extends ConsumerWidget {
-  const Alphabet({Key? key,}) : super(key: key);
+  const Alphabet({Key? key, required this.gridController}) : super(key: key);
+
+  final List<List<TextEditingController>> gridController;
 
   static const List alphabet = <String>[
     'A',
@@ -275,24 +285,42 @@ class Alphabet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(gameProvider);
+    final notifier = ref.read(gameProvider.notifier);
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Flexible(
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: (alphabet.length / 4).ceil(),
-                crossAxisSpacing: 0.0,
-                mainAxisSpacing: 0.0,
-              ),
-              itemCount: alphabet.length,
-              itemBuilder: (BuildContext context, int index) {
-                final status = state.alphabetMap[alphabet[index]];
-                return Text(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: (alphabet.length / 4).ceil(),
+              crossAxisSpacing: 0.0,
+              mainAxisSpacing: 0.0,
+            ),
+            itemCount: alphabet.length + 1,
+            itemBuilder: (BuildContext context, int index) {
+              MatchStatus? status;
+              if (index <= alphabet.length - 1) {
+                status = state.alphabetMap[alphabet[index]];
+              }
+              return InkWell(
+                onTap: () {
+                  gridController[state.attempt][state.colIndex].text = alphabet[index];
+                  notifier.updateColIndex(state.colIndex + 1);
+                },
+                child: index == alphabet.length ? SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: IconButton(
+                      color: Colors.black,
+                      onPressed: () {
+                        gridController[state.attempt][state.colIndex].text = '';
+                        notifier.updateColIndex(state.colIndex -1);
+                      },
+                      icon: const Icon(Icons.backspace_outlined)),
+                )
+                    : Text(
                   alphabet[index],
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -312,18 +340,18 @@ class Alphabet extends ConsumerWidget {
                     color: status == MatchStatus.fully
                         ? good
                         : status == MatchStatus.contained
-                            ? medium
-                            : status == MatchStatus.none
-                                ? greyTint.shade800
-                                : greyTint.shade500,
+                        ? medium
+                        : status == MatchStatus.none
+                        ? greyTint.shade800
+                        : greyTint.shade500,
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
-        ],
-      ),
+        ),
+
+      ],
     );
   }
 }
-

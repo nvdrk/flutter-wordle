@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class GameState extends Equatable {
   const GameState(
       {required this.solution,
+      required this.colIndex,
       required this.trials,
       required this.attempt,
       required this.wordLength,
@@ -12,6 +13,7 @@ class GameState extends Equatable {
       });
 
   final String solution;
+  final int colIndex;
   final int trials;
   final int attempt;
   final int wordLength;
@@ -24,6 +26,7 @@ class GameState extends Equatable {
 
   GameState copyWith(
       {String? solution,
+      int? colIndex,
       int? trials,
       int? attempt,
       int? wordLength,
@@ -33,6 +36,7 @@ class GameState extends Equatable {
       }) {
     return GameState(
       solution: solution ?? this.solution,
+      colIndex: colIndex ?? this.colIndex,
       trials: trials ?? this.trials,
       attempt: attempt ?? this.attempt,
       wordLength: wordLength ?? this.wordLength,

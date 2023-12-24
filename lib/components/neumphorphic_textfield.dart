@@ -1,22 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_wordle/game/game_provider.dart';
 import 'package:flutter_wordle/game/game_state.dart';
 import 'package:flutter_wordle/theme/style.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class NeumorphicTextFormField extends StatelessWidget {
+class NeumorphicTextFormField extends ConsumerWidget {
   const NeumorphicTextFormField({
     Key? key,
     required this.controller,
+    required this.node,
     required this.enabled,
     required this.status,
+    required this.index,
   }) : super(key: key);
 
   final MatchStatus status;
+  final FocusNode node;
+  final int index;
   final bool enabled;
   final TextEditingController controller;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(gameProvider);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: greyTint.shade300, width: 0.5),
@@ -57,15 +64,20 @@ class NeumorphicTextFormField extends StatelessWidget {
           enabled: enabled,
           //focusNode: focus,
           textInputAction: TextInputAction.next,
-          onChanged: (input) {
+          keyboardType: TextInputType.none,
+          onFieldSubmitted: (input) {
             if (input != '') {
-              FocusScope.of(context).nextFocus();
-              controller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: controller.text.length));
+              node.nextFocus();
             } else {
-              controller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: controller.text.length));
-              FocusScope.of(context).previousFocus();
+              node.previousFocus();
+            }
+          },
+          onChanged: (input) {
+            node.unfocus();
+            if (input != '') {
+              node.nextFocus();
+            } else {
+              node.previousFocus();
             }
           },
           decoration: const InputDecoration(

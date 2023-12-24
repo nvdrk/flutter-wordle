@@ -16,6 +16,7 @@ class GameNotifier extends StateNotifier<GameState> {
   GameNotifier()
       : super(const GameState(
             solution: '',
+            colIndex: 0,
             trials: 6,
             attempt: 0,
             submittedAttempt: {},
@@ -28,6 +29,12 @@ class GameNotifier extends StateNotifier<GameState> {
     state = state.copyWith(solution: word);
   }
 
+  void updateColIndex(int colIndex) {
+    if (colIndex == state.wordLength || colIndex < 0) {
+      return;
+    }
+    state = state.copyWith(colIndex: colIndex);
+  }
 
   Map<Validation, Map<String, MatchStatus>> _validate(String guess, int row) {
 
@@ -117,6 +124,7 @@ class GameNotifier extends StateNotifier<GameState> {
         attempt: userSolution.keys.first + 1,
         validation: validations,
         alphabetMap: alphabetMap,
+        colIndex: 0,
     );
   }
 }

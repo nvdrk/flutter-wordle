@@ -13,7 +13,7 @@ class LoadingLayout extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     return Scaffold(
-      backgroundColor: greyTint.shade300,
+      backgroundColor: greyTint.shade200,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
