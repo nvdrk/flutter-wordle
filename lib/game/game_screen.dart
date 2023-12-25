@@ -35,18 +35,11 @@ class GameScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: greyTint.shade200,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(70),
-        child: CustomAppBar(
-          title: 'Word Hamster',
-          isPop: true,
-        ),
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
           child: SizedBox(
-              height: 800,
+              height: 950,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextFields(
@@ -130,11 +123,16 @@ class _TextFieldsState extends ConsumerState<TextFields> {
 
     final state = ref.watch(gameProvider);
     if (state.trials == state.attempt) {
-      _showAlertDialog();
+      _showFailDialog();
+    }
+    debugPrint(guess);
+    debugPrint(state.solution);
+    if (state.solution == guess) {
+      _showSuccessDialog();
     }
   }
 
-  Future<void> _showAlertDialog() async {
+  Future<void> _showFailDialog() {
     final solution = ref.read(gameProvider).solution;
     return showDialog<void>(
       context: context,
@@ -165,6 +163,36 @@ class _TextFieldsState extends ConsumerState<TextFields> {
     );
   }
 
+  Future<void> _showSuccessDialog() {
+    final solution = ref.read(gameProvider).solution;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Yeah :)'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                Text('You found the correct answer: \n'
+                    '$solution'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Go Back'),
+              onPressed: () {
+                ref.invalidate(gameProvider);
+                context.go('/');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(gameProvider);
@@ -173,8 +201,24 @@ class _TextFieldsState extends ConsumerState<TextFields> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 32),
+                child: NeumorphicButton(
+                  onTap: () {
+                    ref.invalidate(gameProvider);
+                    context.go('/');
+                  },
+                  title: 'Back',
+                  height: 50,
+                  width: 200, isToggle: false, hasHapticFeedBack: false,
+                ),
+              ),
+            ],
+          ),
           Flexible(
-            flex: 2,
+            flex: 3,
             child: GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -205,10 +249,11 @@ class _TextFieldsState extends ConsumerState<TextFields> {
             ),
           ),
           Flexible(
-            flex: 1,
+            flex: 2,
             child: SizedBox(
               height: 200,
               child: Card(
+                elevation: 5,
                 color: greyTint.shade100,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -310,9 +355,7 @@ class Alphabet extends ConsumerWidget {
                   gridController[state.attempt][state.colIndex].text = alphabet[index];
                   notifier.updateColIndex(state.colIndex + 1);
                 },
-                child: index == alphabet.length ? SizedBox(
-                  height: 50,
-                  width: 50,
+                child: index == alphabet.length ? Center(
                   child: IconButton(
                       color: Colors.black,
                       onPressed: () {
@@ -321,32 +364,34 @@ class Alphabet extends ConsumerWidget {
                       },
                       icon: const Icon(Icons.backspace_outlined)),
                 )
-                    : Text(
+                    : Center(
+                      child: Text(
                   alphabet[index],
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    shadows: [
-                      Shadow(
-                        offset: const Offset(2, 2),
-                        blurRadius: 2.0,
-                        color: greyTint.shade50,
-                      ),
-                      Shadow(
-                        offset: const Offset(-0.5, -0.5),
-                        blurRadius: 2.0,
-                        color: greyTint.shade700,
-                      ),
-                    ],
-                    fontSize: 25,
-                    color: status == MatchStatus.fully
-                        ? good
-                        : status == MatchStatus.contained
-                        ? medium
-                        : status == MatchStatus.none
-                        ? greyTint.shade800
-                        : greyTint.shade500,
+                      shadows: [
+                        Shadow(
+                          offset: const Offset(2, 2),
+                          blurRadius: 2.0,
+                          color: greyTint.shade50,
+                        ),
+                        Shadow(
+                          offset: const Offset(-0.5, -0.5),
+                          blurRadius: 2.0,
+                          color: greyTint.shade700,
+                        ),
+                      ],
+                      fontSize: 25,
+                      color: status == MatchStatus.fully
+                          ? good
+                          : status == MatchStatus.contained
+                          ? medium
+                          : status == MatchStatus.none
+                          ? greyTint.shade800
+                          : greyTint.shade500,
                   ),
                 ),
+                    ),
               );
             },
           ),
