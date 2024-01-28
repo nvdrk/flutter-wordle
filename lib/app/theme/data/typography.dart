@@ -1,7 +1,5 @@
 part of '../theme.dart';
 
-
-
 class HeadlineTextStyle extends RobotoTextStyle {
   const HeadlineTextStyle({
     super.color,

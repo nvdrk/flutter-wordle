@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_wordle/navigation/navigator.dart';
+import 'package:flutter_wordle/app/navigation/navigator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_wordle/theme/style.dart';
+import 'package:flutter_wordle/app/theme/style.dart';
 
 void main() {
   runApp(const MyApp());

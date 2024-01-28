@@ -1,8 +1,6 @@
 import 'dart:ui' as ui show lerpDouble;
 import 'package:flutter/material.dart';
 
-
-
 part 'data/colors.dart';
 part 'data/material.dart';
 part 'data/radius.dart';

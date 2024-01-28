@@ -1,10 +1,16 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_wordle/theme/style.dart';
+import 'package:flutter_wordle/app/theme/style.dart';
 
 class NeumorphicButton extends StatefulWidget {
-  const NeumorphicButton({Key? key, required this.onTap, required this.title, required this.height, required this.width, required this.isToggle, required this.hasHapticFeedBack}) : super(key: key);
+  const NeumorphicButton(
+      {Key? key,
+      required this.onTap,
+      required this.title,
+      required this.height,
+      required this.width,
+      required this.isToggle,
+      required this.hasHapticFeedBack})
+      : super(key: key);
 
   final VoidCallback onTap;
   final String title;
@@ -18,7 +24,6 @@ class NeumorphicButton extends StatefulWidget {
 }
 
 class _NeumorphicButtonState extends State<NeumorphicButton> {
-
   bool _isElevated = true;
 
   void _toggle() {
@@ -52,19 +57,20 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
             decoration: BoxDecoration(
               border: Border.all(color: greyTint.shade200, width: 0.5),
               borderRadius: const BorderRadius.all(Radius.circular(15)),
-              gradient: _isElevated ? null :
-              LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: const [
-                  0.05,
-                  1.2,
-                ],
-                colors: [
-                  greyTint.shade100,
-                  greyTint.shade300,
-                ],
-              ),
+              gradient: _isElevated
+                  ? null
+                  : LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      stops: const [
+                        0.05,
+                        1.2,
+                      ],
+                      colors: [
+                        greyTint.shade100,
+                        greyTint.shade300,
+                      ],
+                    ),
               boxShadow: [
                 BoxShadow(
                   color: greyTint.shade400,
@@ -82,7 +88,6 @@ class _NeumorphicButtonState extends State<NeumorphicButton> {
               color: greyTint.shade200,
             ),
             duration: const Duration(milliseconds: 100),
-
             child: Center(
               child: Text(
                 widget.title,

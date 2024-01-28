@@ -4,10 +4,9 @@ import 'package:flutter_wordle/components/neumorphic_button.dart';
 import 'package:flutter_wordle/layouts/loading_layout.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_wordle/components/appbar.dart';
-import 'package:flutter_wordle/game/game_state.dart';
-import 'package:flutter_wordle/game/game_provider.dart';
-import 'package:flutter_wordle/theme/style.dart';
+import 'package:flutter_wordle/presentation/game/game_state.dart';
+import 'package:flutter_wordle/presentation/game/game_provider.dart';
+import 'package:flutter_wordle/app/theme/style.dart';
 import 'package:flutter_wordle/components/neumphorphic_textfield.dart';
 
 class GameLayout extends ConsumerWidget {
@@ -102,9 +101,8 @@ class _TextFieldsState extends ConsumerState<TextFields> {
 
   void _submit(int index) async {
     ref.read(gameProvider.notifier).setWord(widget.solution);
-
     final charList = <String>[];
-    for (var element in _gridController[index]) {
+    for (final element in _gridController[index]) {
       charList.add(element.text);
     }
     charList.removeWhere((element) => element == '');
@@ -119,9 +117,8 @@ class _TextFieldsState extends ConsumerState<TextFields> {
     final guess = charList.join('').trim();
     ref.read(gameProvider.notifier)
       ..submit({index: guess})
-    ..updateColIndex(0);
-
-    final state = ref.watch(gameProvider);
+      ..updateColIndex(0);
+    final state = ref.read(gameProvider);
     if (state.trials == state.attempt) {
       _showFailDialog();
     }
@@ -133,7 +130,6 @@ class _TextFieldsState extends ConsumerState<TextFields> {
   }
 
   Future<void> _showFailDialog() {
-    final solution = ref.read(gameProvider).solution;
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -145,7 +141,7 @@ class _TextFieldsState extends ConsumerState<TextFields> {
               children: [
                 Text('No Luck this time \n'
                     'The Solution is: \n'
-                    '$solution'),
+                    '${widget.solution}'),
               ],
             ),
           ),
@@ -164,7 +160,6 @@ class _TextFieldsState extends ConsumerState<TextFields> {
   }
 
   Future<void> _showSuccessDialog() {
-    final solution = ref.read(gameProvider).solution;
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -175,7 +170,7 @@ class _TextFieldsState extends ConsumerState<TextFields> {
             child: ListBody(
               children: [
                 Text('You found the correct answer: \n'
-                    '$solution'),
+                    '${widget.solution}'),
               ],
             ),
           ),

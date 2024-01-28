@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_wordle/game/game_state.dart';
-import 'package:flutter_wordle/theme/style.dart';
+import 'package:flutter_wordle/presentation/game/game_state.dart';
+import 'package:flutter_wordle/app/theme/style.dart';
 
 class NeumorphicTextFormField extends StatelessWidget {
   const NeumorphicTextFormField({

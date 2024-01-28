@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_wordle/components/neumorphic_button.dart';
-import 'package:flutter_wordle/theme/style.dart';
-import 'package:flutter_wordle/theme/theme.dart';
+import 'package:flutter_wordle/app/theme/style.dart';
+import 'package:flutter_wordle/app/theme/theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
@@ -12,7 +12,6 @@ class WelcomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Scaffold(
       backgroundColor: greyTint.shade200,
       appBar: AppBar(
@@ -27,7 +26,8 @@ class WelcomeScreen extends ConsumerWidget {
             children: [
               Text(
                 'WORD HAMSTER',
-                style: const MontserratTextStyle().copyWith(color: greyTint.shade800, fontSize: 30),
+                style: const MontserratTextStyle()
+                    .copyWith(color: greyTint.shade800, fontSize: 30),
               ),
               Lottie.asset(
                 'assets/lottie/title.json',
@@ -39,7 +39,9 @@ class WelcomeScreen extends ConsumerWidget {
                   onTap: () => context.go('/game'),
                   title: 'New Game',
                   height: 50,
-                  width: 200, isToggle: false, hasHapticFeedBack: false,
+                  width: 200,
+                  isToggle: false,
+                  hasHapticFeedBack: false,
                 ),
               ),
               Padding(
@@ -48,7 +50,9 @@ class WelcomeScreen extends ConsumerWidget {
                   onTap: () => print('pressed'),
                   title: 'Settings',
                   height: 50,
-                  width: 200, isToggle: false, hasHapticFeedBack: false,
+                  width: 200,
+                  isToggle: false,
+                  hasHapticFeedBack: false,
                 ),
               ),
             ],

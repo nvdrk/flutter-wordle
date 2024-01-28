@@ -1,7 +1,7 @@
 import 'package:flutter_wordle/data/api.dart';
-import 'package:flutter_wordle/game/game_provider.dart';
+import 'package:flutter_wordle/presentation/game/game_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_wordle/game/game_state.dart';
+import 'package:flutter_wordle/presentation/game/game_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 

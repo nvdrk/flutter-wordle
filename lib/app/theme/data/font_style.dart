@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_wordle/theme/style.dart';
-
-
+import 'package:flutter_wordle/app/theme/style.dart';
 
 
 class GoogleTextTheme extends TextTheme {

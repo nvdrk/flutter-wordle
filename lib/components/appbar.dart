@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_wordle/game/game_provider.dart';
+import 'package:flutter_wordle/presentation/game/game_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_wordle/theme/style.dart';
+import 'package:flutter_wordle/app/theme/style.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CustomAppBar extends ConsumerWidget {
